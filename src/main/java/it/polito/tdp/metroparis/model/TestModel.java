@@ -19,7 +19,7 @@ public class TestModel {
 		
 		Fermata a = m.trovaFermata("Temple") ;
 		
-		List<Fermata> percorso = m.trovaCammino(p, a) ;
+		List<Fermata> percorso = m.trovaCammino2(p, a) ;
 		System.out.println(percorso) ;
 
 	}

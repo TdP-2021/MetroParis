@@ -156,4 +156,26 @@ public class Model {
 		return result ;
 	}
 	
+	
+	// Implementazione di 'trovaCammino' che NON usa il traversal listener ma sfrutta
+	// il metodo getParent presente in BreadthFirstIterator
+	public List<Fermata> trovaCammino2(Fermata partenza, Fermata arrivo) {
+		BreadthFirstIterator<Fermata, DefaultEdge> bfv = 
+				new BreadthFirstIterator<Fermata, DefaultEdge>(this.grafo, partenza) ;
+		
+		// fai lavorare l'iteratore per trovare tutti i vertici
+		while(bfv.hasNext())
+			bfv.next() ; // non mi serve il valore
+		
+		List<Fermata> result = new LinkedList<>() ;
+		Fermata f = arrivo ;
+		while(f!=null) {
+			result.add(f) ;
+			f = bfv.getParent(f) ;
+		}
+		
+		return result ;
+		
+	}
+	
 }
