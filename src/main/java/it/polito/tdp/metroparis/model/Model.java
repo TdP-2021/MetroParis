@@ -2,10 +2,15 @@ package it.polito.tdp.metroparis.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
+import org.jgrapht.event.ConnectedComponentTraversalEvent;
+import org.jgrapht.event.EdgeTraversalEvent;
+import org.jgrapht.event.TraversalListener;
+import org.jgrapht.event.VertexTraversalEvent;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.traverse.BreadthFirstIterator;
@@ -16,6 +21,8 @@ import it.polito.tdp.metroparis.db.MetroDAO;
 public class Model {
 	
 	Graph<Fermata, DefaultEdge> grafo ;
+	
+	Map<Fermata, Fermata> predecessore ;
 
 	public void creaGrafo() {
 		this.grafo = new SimpleGraph<>(DefaultEdge.class) ;
@@ -72,6 +79,38 @@ public class Model {
 	public List<Fermata> fermateRaggiungibili(Fermata partenza) {
 		BreadthFirstIterator<Fermata, DefaultEdge> bfv = 
 				new BreadthFirstIterator<>(this.grafo, partenza) ;
+		
+		bfv.addTraversalListener(new TraversalListener<Fermata, DefaultEdge>() {
+
+			@Override
+			public void connectedComponentFinished(ConnectedComponentTraversalEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void connectedComponentStarted(ConnectedComponentTraversalEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void edgeTraversed(EdgeTraversalEvent<DefaultEdge> e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void vertexTraversed(VertexTraversalEvent<Fermata> e) {
+				System.out.println(e.getVertex());
+			}
+
+			@Override
+			public void vertexFinished(VertexTraversalEvent<Fermata> e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 //		DepthFirstIterator<Fermata, DefaultEdge> dfv = 
 //				new DepthFirstIterator<>(this.grafo, partenza) ;
