@@ -16,6 +16,11 @@ public class TestModel {
 			List<Fermata> raggiungibili = m.fermateRaggiungibili(p);
 			System.out.println(raggiungibili);
 		}
+		
+		Fermata a = m.trovaFermata("Temple") ;
+		
+		List<Fermata> percorso = m.trovaCammino(p, a) ;
+		System.out.println(percorso) ;
 
 	}
 

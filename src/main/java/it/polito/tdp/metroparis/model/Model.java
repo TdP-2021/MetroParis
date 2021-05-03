@@ -1,6 +1,8 @@
 package it.polito.tdp.metroparis.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -80,35 +82,41 @@ public class Model {
 		BreadthFirstIterator<Fermata, DefaultEdge> bfv = 
 				new BreadthFirstIterator<>(this.grafo, partenza) ;
 		
+		this.predecessore = new HashMap<>() ;
+		this.predecessore.put(partenza, null) ;
+		
 		bfv.addTraversalListener(new TraversalListener<Fermata, DefaultEdge>() {
-
 			@Override
 			public void connectedComponentFinished(ConnectedComponentTraversalEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
-
 			@Override
 			public void connectedComponentStarted(ConnectedComponentTraversalEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
-
 			@Override
 			public void edgeTraversed(EdgeTraversalEvent<DefaultEdge> e) {
-				// TODO Auto-generated method stub
-				
+				DefaultEdge arco = e.getEdge() ;
+				Fermata a = grafo.getEdgeSource(arco);
+				Fermata b = grafo.getEdgeTarget(arco);
+				// ho scoperto 'a' arrivando da 'b' (se 'b' lo conoscevo) b->a
+				if(predecessore.containsKey(b) && !predecessore.containsKey(a)) {
+					predecessore.put(a, b) ;
+//					System.out.println(a + " scoperto da "+ b) ;
+				} else if(predecessore.containsKey(a) && !predecessore.containsKey(b)) {
+					// di sicuro conoscevo 'a' e quindi ho scoperto 'b'
+					predecessore.put(b, a) ;
+//					System.out.println(b + " scoperto da "+ a) ;
+				}
 			}
-
 			@Override
 			public void vertexTraversed(VertexTraversalEvent<Fermata> e) {
-				System.out.println(e.getVertex());
+//				System.out.println(e.getVertex());
+//				Fermata nuova = e.getVertex() ;
+//				Fermata precedente = vertice adiacente a 'nuova' che sia già raggiunto
+//						(cioè è già presente nelle key della mappa);
+//				predecessore.put(nuova, precedente) ;
 			}
-
 			@Override
 			public void vertexFinished(VertexTraversalEvent<Fermata> e) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		
@@ -132,6 +140,20 @@ public class Model {
 			}
 		}
 		return null ;
+	}
+	
+	public List<Fermata> trovaCammino(Fermata partenza, Fermata arrivo) {
+		fermateRaggiungibili(partenza) ;
+		
+		List<Fermata> result = new LinkedList<>() ;
+		result.add(arrivo) ;
+		Fermata f = arrivo ;
+		while(predecessore.get(f)!=null) {
+			f = predecessore.get(f) ;
+			result.add(0, f) ;
+		}
+		
+		return result ;
 	}
 	
 }
